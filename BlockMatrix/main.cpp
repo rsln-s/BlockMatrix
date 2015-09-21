@@ -8,20 +8,32 @@
 
 #include <iostream>
 #include "RSMatrixMultiplyer.hpp"
+#include "time.h"
 
 int main(int argc, const char * argv[]) {
     RSMatrixMultiplyer multiplyer = *new RSMatrixMultiplyer;
-    // insert code here...
-    int** matr = new int*[3];
-    for (int i = 0; i < 3; i++) {
-        matr[i] = new int[3];
-    }
-    for (int i = 0; i<3; i++) {
-        for (int j = 0; j < 3; j++) {
-            matr[i][j] = 1;
-        }
-    }
-    int** res = multiplyer.multiplySquareMatrixes(matr, matr, 3);
-    multiplyer.printMatrix(res, 3);
+    int** matr1 = multiplyer.generateRandMatrix(1024);
+    int** matr2 = multiplyer.generateRandMatrix(1024);
+    
+    std::cout << "all matrixes successfully generated \n";
+    
+    clock_t startTime = clock();
+    int** res1 = multiplyer.multiplySquareMatrixes(matr1, matr2, 1024);
+    clock_t endTime = clock();
+    
+    std::cout << "Time for ordinary multiplication " << (endTime - startTime)/CLOCKS_PER_SEC << "\n";
+    
+    int** matr1_t = multiplyer.transponMatrix(matr1, 1024);
+    int** matr2_t = multiplyer.transponMatrix(matr2, 1024);
+    
+    startTime = clock();
+    
+    int** res2 = multiplyer.transponMultiplySquareMatrixes(matr1_t, matr2_t, 1024);
+    
+    endTime = clock();
+    std::cout << "Time for transpon multiplication " << (endTime - startTime)/CLOCKS_PER_SEC << "\n";
+
+//    multiplyer.printMatrix(res1, 1024);
+//    multiplyer.printMatrix(res2, 1024);
     return 0;
 }
